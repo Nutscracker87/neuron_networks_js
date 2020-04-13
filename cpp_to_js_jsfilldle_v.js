@@ -285,8 +285,13 @@ var iris_category = {
 };
 
 window.onload = function () {
-var epochCount = 45000;
+
+
+ // addDataPoints(45000);
+
+var epochCount = 500000;
 var iteration = 0;
+var yArray = [];
 for (let index = 0; index < epochCount; index++) {
 // while (net.error > 0.0035) {
     iteration++;
@@ -298,26 +303,66 @@ for (let index = 0; index < epochCount; index++) {
     });
     // net.feedForward(learningSet);
 
-
+    //addValues(net.error);
     var err = document.getElementById('error');
     err.textContent = net.error;
     var epoch = document.getElementById('epoch');
     epoch.textContent = iteration;
-
+    yArray.push(net.error);
     console.log(net.error, 'epoch num: ' + iteration)
 }
 
+
+ var cnt = 0;
+ var chartNN = document.getElementById('chart');
+ var layout = {
+  title: {
+    text:'Neuron network education',
+    font: {
+      family: 'Courier New, monospace',
+      size: 24
+    },
+    xref: 'paper',
+    x: 0.05,
+  },
+  xaxis: {
+    title: {
+      text: 'Epoch',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Error',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    }
+  }
+};
+
+ Plotly.plot(chartNN,[{
+   y: yArray,
+   type:'line',
+   name: 'Error'
+ }], layout);
+
 //[5.5,2.6,4.4,1.2,"versicolor"]
 console.log('Epoch: ' + iteration, 'Error = ' + net.error)
-test_net([5.9,3.2,4.9,1.8,"versicolor"]);
+test_net([5.9,3.2,4.8,1.8,"versicolor"]);
 test_net([5.5,2.6,4.4,1.2,"versicolor"]);
 test_net([5,2.3,3.3,1,"versicolor"]);
 test_net([7,3.2,4.7,1.4,"versicolor"]);
 test_net([5.7,2.9,4.2,1.3,"versicolor"]);
 test_net([6.8,3.2,5.9,2.3,"virginica"]);
 test_net([6.7,3,5.2,2.3,"virginica"]);
-test_net([5,3.5,1.3,0.3,"setosa"]);
-
+test_net([5,3.5,1.3,0.3,"sectosa"]);
 };
 
 function test_net(set) {
@@ -337,16 +382,11 @@ function test_net(set) {
     }
 
 var newline = document.createElement('p');
-newline.textContent = 'result ' + resultSet[0] + ' answer flower: ' + flowerName + ' == right: ' + rightAnswer;
+var true_or_false = (flowerName == rightAnswer) ? ' TRUE ' : 'FALSE';
+newline.textContent = 'result ' + resultSet[0] + ' answer flower: ' + flowerName + ' == ' + rightAnswer + ' : ' + true_or_false;
 document.getElementById('results').appendChild(newline);
     console.log('result ' + resultSet[0], 'flower: ' + flowerName, 'right: ' + rightAnswer);
 }
 
-// HTML HERE
-{/* <div id="main">
-Error: <span id="error">0</span>, Epoch <span id="epoch">0</span>
-<br>
-Results:
-<div id="results"></div>
 
-</div> */}
+
